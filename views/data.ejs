@@ -1,0 +1,551 @@
+<%- include('./partials/header') %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card bg-primary text-white">
+      <div class="card-body">
+        <h2>Data Management</h2>
+        <p class="lead">Upload, view, and manage your business data to power AI-driven insights.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Upload Sales Data</h5>
+      </div>
+      <div class="card-body">
+        <form id="salesDataForm">
+          <div class="alert alert-success d-none" id="salesSuccess">Data uploaded successfully!</div>
+          <div class="alert alert-danger d-none" id="salesError"></div>
+          
+          <div class="mb-3">
+            <label for="salesDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="salesDate" name="salesDate" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="salesAmount" class="form-label">Amount ($)</label>
+            <input type="number" step="0.01" min="0" class="form-control" id="salesAmount" name="salesAmount" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="itemsSold" class="form-label">Items Sold</label>
+            <input type="number" min="1" class="form-control" id="itemsSold" name="itemsSold" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="categories" class="form-label">Categories (comma separated)</label>
+            <input type="text" class="form-control" id="categories" name="categories" placeholder="e.g. clothing, accessories">
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100">Upload Sales Data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Upload Customer Data</h5>
+      </div>
+      <div class="card-body">
+        <form id="customerDataForm">
+          <div class="alert alert-success d-none" id="customerSuccess">Data uploaded successfully!</div>
+          <div class="alert alert-danger d-none" id="customerError"></div>
+          
+          <div class="mb-3">
+            <label for="customerDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="customerDate" name="customerDate" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="customerCount" class="form-label">Customer Count</label>
+            <input type="number" min="0" class="form-control" id="customerCount" name="customerCount" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="interactionType" class="form-label">Interaction Type</label>
+            <select class="form-select" id="interactionType" name="interactionType" required>
+              <option value="walk-in">Walk-in</option>
+              <option value="online">Online</option>
+              <option value="phone">Phone</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100">Upload Customer Data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Upload Foot Traffic</h5>
+      </div>
+      <div class="card-body">
+        <form id="trafficDataForm">
+          <div class="alert alert-success d-none" id="trafficSuccess">Data uploaded successfully!</div>
+          <div class="alert alert-danger d-none" id="trafficError"></div>
+          
+          <div class="mb-3">
+            <label for="trafficDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="trafficDate" name="trafficDate" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="trafficCount" class="form-label">Visitor Count</label>
+            <input type="number" min="0" class="form-control" id="trafficCount" name="trafficCount" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="peakHours" class="form-label">Peak Hours (comma separated)</label>
+            <input type="text" class="form-control" id="peakHours" name="peakHours" placeholder="e.g. 9-11AM, 2-4PM">
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100">Upload Traffic Data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Your Data History</h5>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-outline-secondary" id="salesBtn">Sales</button>
+          <button class="btn btn-sm btn-outline-secondary" id="customerBtn">Customers</button>
+          <button class="btn btn-sm btn-outline-secondary" id="trafficBtn">Traffic</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped" id="dataTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Items Sold</th>
+                <th>Categories</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dataTableBody">
+              <!-- Data will be populated via JavaScript -->
+              <tr>
+                <td colspan="5" class="text-center">Loading data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <button class="btn btn-sm btn-outline-secondary" id="prevPage">Previous</button>
+            <span id="pageInfo" class="mx-2">Page 1 of 1</span>
+            <button class="btn btn-sm btn-outline-secondary" id="nextPage">Next</button>
+          </div>
+          <button class="btn btn-sm btn-success" id="exportData">
+            <i class="fas fa-file-excel me-1"></i> Export to CSV
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sales Data Form Submission
+    document.getElementById('salesDataForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const salesDate = document.getElementById('salesDate').value;
+      const salesAmount = document.getElementById('salesAmount').value;
+      const itemsSold = document.getElementById('itemsSold').value;
+      const categories = document.getElementById('categories').value.split(',').map(cat => cat.trim()).filter(cat => cat !== '');
+      
+      const successElement = document.getElementById('salesSuccess');
+      const errorElement = document.getElementById('salesError');
+      
+      try {
+        const response = await fetchWithAuth('/api/data/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            salesData: [{
+              date: salesDate,
+              amount: parseFloat(salesAmount),
+              itemsSold: parseInt(itemsSold),
+              categories
+            }]
+          })
+        });
+        
+        const data = await handleApiResponse(response);
+        
+        if (data && data.success) {
+          // Show success message
+          successElement.classList.remove('d-none');
+          errorElement.classList.add('d-none');
+          
+          // Reset form
+          document.getElementById('salesDataForm').reset();
+          
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+            successElement.classList.add('d-none');
+          }, 3000);
+          
+          // Refresh data table
+          loadSalesData();
+        } else {
+          // Show error message
+          errorElement.textContent = data.message || 'Failed to upload data. Please try again.';
+          errorElement.classList.remove('d-none');
+          successElement.classList.add('d-none');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        errorElement.textContent = 'Server error. Please try again later.';
+        errorElement.classList.remove('d-none');
+        successElement.classList.add('d-none');
+      }
+    });
+    
+    // Customer Data Form Submission
+    document.getElementById('customerDataForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const customerDate = document.getElementById('customerDate').value;
+      const customerCount = document.getElementById('customerCount').value;
+      const interactionType = document.getElementById('interactionType').value;
+      
+      const successElement = document.getElementById('customerSuccess');
+      const errorElement = document.getElementById('customerError');
+      
+      try {
+        const response = await fetchWithAuth('/api/data/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            customerInteractions: [{
+              date: customerDate,
+              count: parseInt(customerCount),
+              type: interactionType
+            }]
+          })
+        });
+        
+        const data = await handleApiResponse(response);
+        
+        if (data && data.success) {
+          successElement.classList.remove('d-none');
+          errorElement.classList.add('d-none');
+          document.getElementById('customerDataForm').reset();
+          setTimeout(() => {
+            successElement.classList.add('d-none');
+          }, 3000);
+        } else {
+          errorElement.textContent = data.message || 'Failed to upload data. Please try again.';
+          errorElement.classList.remove('d-none');
+          successElement.classList.add('d-none');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        errorElement.textContent = 'Server error. Please try again later.';
+        errorElement.classList.remove('d-none');
+        successElement.classList.add('d-none');
+      }
+    });
+    
+    // Traffic Data Form Submission
+    document.getElementById('trafficDataForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const trafficDate = document.getElementById('trafficDate').value;
+      const trafficCount = document.getElementById('trafficCount').value;
+      const peakHours = document.getElementById('peakHours').value.split(',').map(hour => hour.trim()).filter(hour => hour !== '');
+      
+      const successElement = document.getElementById('trafficSuccess');
+      const errorElement = document.getElementById('trafficError');
+      
+      try {
+        const response = await fetchWithAuth('/api/data/upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            footTraffic: [{
+              date: trafficDate,
+              count: parseInt(trafficCount),
+              peakHours
+            }]
+          })
+        });
+        
+        const data = await handleApiResponse(response);
+        
+        if (data && data.success) {
+          successElement.classList.remove('d-none');
+          errorElement.classList.add('d-none');
+          document.getElementById('trafficDataForm').reset();
+          setTimeout(() => {
+            successElement.classList.add('d-none');
+          }, 3000);
+        } else {
+          errorElement.textContent = data.message || 'Failed to upload data. Please try again.';
+          errorElement.classList.remove('d-none');
+          successElement.classList.add('d-none');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        errorElement.textContent = 'Server error. Please try again later.';
+        errorElement.classList.remove('d-none');
+        successElement.classList.add('d-none');
+      }
+    });
+    
+    // Load initial sales data
+    loadSalesData();
+    
+    // Tab switching
+    document.getElementById('salesBtn').addEventListener('click', loadSalesData);
+    document.getElementById('customerBtn').addEventListener('click', loadCustomerData);
+    document.getElementById('trafficBtn').addEventListener('click', loadTrafficData);
+  });
+  
+  // Functions to load different types of data
+  async function loadSalesData() {
+    // Update active button
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('salesBtn').classList.add('active');
+    
+    // Update table headers
+    const tableHead = document.querySelector('#dataTable thead tr');
+    tableHead.innerHTML = `
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Items Sold</th>
+      <th>Categories</th>
+      <th>Actions</th>
+    `;
+    
+    // Load data
+    const tableBody = document.getElementById('dataTableBody');
+    tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Loading data...</td></tr>';
+    
+    try {
+      const response = await fetchWithAuth('/api/data');
+      const data = await handleApiResponse(response);
+      
+      if (data && data.success) {
+        if (data.data.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No sales data available. Upload some data to get started.</td></tr>';
+          return;
+        }
+        
+        // Extract all sales data from multiple data entries
+        let allSalesData = [];
+        data.data.forEach(entry => {
+          if (entry.salesData && entry.salesData.length > 0) {
+            entry.salesData.forEach(sale => {
+              allSalesData.push({
+                id: entry._id,
+                ...sale
+              });
+            });
+          }
+        });
+        
+        // Sort by date (newest first)
+        allSalesData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Render sales data
+        tableBody.innerHTML = '';
+        allSalesData.forEach(sale => {
+          const date = new Date(sale.date).toLocaleDateString();
+          const amount = `$${sale.amount.toFixed(2)}`;
+          const categories = sale.categories.join(', ') || 'N/A';
+          
+          tableBody.innerHTML += `
+            <tr>
+              <td>${date}</td>
+              <td>${amount}</td>
+              <td>${sale.itemsSold}</td>
+              <td>${categories}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-danger deleteBtn" data-id="${sale.id}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Failed to load data. Please try again.</td></tr>';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      tableBody.innerHTML = '<tr><td colspan="5" class="text-center">Server error. Please try again later.</td></tr>';
+    }
+  }
+  
+  async function loadCustomerData() {
+    // Update active button
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('customerBtn').classList.add('active');
+    
+    // Update table headers
+    const tableHead = document.querySelector('#dataTable thead tr');
+    tableHead.innerHTML = `
+      <th>Date</th>
+      <th>Customer Count</th>
+      <th>Interaction Type</th>
+      <th>Actions</th>
+    `;
+    
+    // Load data
+    const tableBody = document.getElementById('dataTableBody');
+    tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Loading data...</td></tr>';
+    
+    try {
+      const response = await fetchWithAuth('/api/data');
+      const data = await handleApiResponse(response);
+      
+      if (data && data.success) {
+        if (data.data.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No customer data available. Upload some data to get started.</td></tr>';
+          return;
+        }
+        
+        // Extract all customer data
+        let allCustomerData = [];
+        data.data.forEach(entry => {
+          if (entry.customerInteractions && entry.customerInteractions.length > 0) {
+            entry.customerInteractions.forEach(interaction => {
+              allCustomerData.push({
+                id: entry._id,
+                ...interaction
+              });
+            });
+          }
+        });
+        
+        // Sort by date (newest first)
+        allCustomerData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Render customer data
+        tableBody.innerHTML = '';
+        allCustomerData.forEach(interaction => {
+          const date = new Date(interaction.date).toLocaleDateString();
+          
+          tableBody.innerHTML += `
+            <tr>
+              <td>${date}</td>
+              <td>${interaction.count}</td>
+              <td>${interaction.type.charAt(0).toUpperCase() + interaction.type.slice(1)}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-danger deleteBtn" data-id="${interaction.id}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Failed to load data. Please try again.</td></tr>';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Server error. Please try again later.</td></tr>';
+    }
+  }
+  
+  async function loadTrafficData() {
+    // Update active button
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('trafficBtn').classList.add('active');
+    
+    // Update table headers
+    const tableHead = document.querySelector('#dataTable thead tr');
+    tableHead.innerHTML = `
+      <th>Date</th>
+      <th>Visitor Count</th>
+      <th>Peak Hours</th>
+      <th>Actions</th>
+    `;
+    
+    // Load data
+    const tableBody = document.getElementById('dataTableBody');
+    tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Loading data...</td></tr>';
+    
+    try {
+      const response = await fetchWithAuth('/api/data');
+      const data = await handleApiResponse(response);
+      
+      if (data && data.success) {
+        if (data.data.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No traffic data available. Upload some data to get started.</td></tr>';
+          return;
+        }
+        
+        // Extract all traffic data
+        let allTrafficData = [];
+        data.data.forEach(entry => {
+          if (entry.footTraffic && entry.footTraffic.length > 0) {
+            entry.footTraffic.forEach(traffic => {
+              allTrafficData.push({
+                id: entry._id,
+                ...traffic
+              });
+            });
+          }
+        });
+        
+        // Sort by date (newest first)
+        allTrafficData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Render traffic data
+        tableBody.innerHTML = '';
+        allTrafficData.forEach(traffic => {
+          const date = new Date(traffic.date).toLocaleDateString();
+          const peakHours = traffic.peakHours.join(', ') || 'N/A';
+          
+          tableBody.innerHTML += `
+            <tr>
+              <td>${date}</td>
+              <td>${traffic.count}</td>
+              <td>${peakHours}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-danger deleteBtn" data-id="${traffic.id}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      } else {
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Failed to load data. Please try again.</td></tr>';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      tableBody.innerHTML = '<tr><td colspan="4" class="text-center">Server error. Please try again later.</td></tr>';
+    }
+  }
+</script>
+
+<%- include('./partials/footer') %> 

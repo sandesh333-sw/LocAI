@@ -1,0 +1,429 @@
+<%- include('./partials/header') %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card bg-primary text-white">
+      <div class="card-body">
+        <h2>Your Business Profile</h2>
+        <p class="lead">Manage your business information and account settings.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-store fa-5x text-primary"></i>
+        </div>
+        <h4 id="businessNameDisplay">Business Name</h4>
+        <p class="text-muted mb-1" id="businessTypeDisplay">Business Type</p>
+        <p class="text-muted" id="locationDisplay">Location</p>
+        <div class="d-flex justify-content-center mt-3">
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+            <i class="fas fa-edit me-1"></i> Edit Profile
+          </button>
+          <button class="btn btn-outline-danger">
+            <i class="fas fa-shield-alt me-1"></i> Security
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Account Info</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <div class="d-flex justify-content-between">
+            <div class="text-muted">Email</div>
+            <div id="emailDisplay">user@example.com</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between">
+            <div class="text-muted">Account Created</div>
+            <div id="createdAtDisplay">January 1, 2023</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between">
+            <div class="text-muted">Subscription</div>
+            <div class="badge bg-success">Active</div>
+          </div>
+        </div>
+        <div class="d-grid">
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+            <i class="fas fa-key me-1"></i> Change Password
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Account Activity</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Activity</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Last Login</td>
+                <td id="lastLoginDate">September 14, 2023, 10:30 AM</td>
+                <td><span class="badge bg-success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Data Upload</td>
+                <td>September 12, 2023, 3:15 PM</td>
+                <td><span class="badge bg-success">Success</span></td>
+              </tr>
+              <tr>
+                <td>Profile Update</td>
+                <td>September 8, 2023, 1:45 PM</td>
+                <td><span class="badge bg-success">Success</span></td>
+              </tr>
+              <tr>
+                <td>AI Analysis</td>
+                <td>September 5, 2023, 9:20 AM</td>
+                <td><span class="badge bg-success">Success</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Business Settings</h5>
+      </div>
+      <div class="card-body">
+        <form id="settingsForm">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="businessHours" class="form-label">Business Hours</label>
+              <input type="text" class="form-control" id="businessHours" placeholder="e.g. Mon-Fri: 9AM-5PM">
+            </div>
+            <div class="col-md-6">
+              <label for="timezone" class="form-label">Timezone</label>
+              <select class="form-select" id="timezone">
+                <option value="UTC-8">Pacific Time (PT)</option>
+                <option value="UTC-7">Mountain Time (MT)</option>
+                <option value="UTC-6">Central Time (CT)</option>
+                <option value="UTC-5">Eastern Time (ET)</option>
+                <option value="UTC">UTC</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Notification Preferences</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+              <label class="form-check-label" for="emailNotifications">
+                Email Notifications
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="smsNotifications">
+              <label class="form-check-label" for="smsNotifications">
+                SMS Notifications
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="weeklyReports" checked>
+              <label class="form-check-label" for="weeklyReports">
+                Weekly Summary Reports
+              </label>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Data Sharing Preferences</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="anonymousData" checked>
+              <label class="form-check-label" for="anonymousData">
+                Share anonymous data for market research
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="improvementProgram" checked>
+              <label class="form-check-label" for="improvementProgram">
+                Participate in product improvement program
+              </label>
+            </div>
+          </div>
+          
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Business Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editProfileForm">
+          <div class="alert alert-success d-none" id="profileSuccess">Profile updated successfully!</div>
+          <div class="alert alert-danger d-none" id="profileError"></div>
+          
+          <div class="mb-3">
+            <label for="businessName" class="form-label">Business Name</label>
+            <input type="text" class="form-control" id="businessName" name="businessName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="businessType" class="form-label">Business Type</label>
+            <select class="form-select" id="businessType" name="businessType" required>
+              <option value="retail">Retail</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="salon">Salon</option>
+              <option value="grocery">Grocery Store</option>
+              <option value="bakery">Bakery</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="location" class="form-label">Business Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="changePasswordForm">
+          <div class="alert alert-success d-none" id="passwordSuccess">Password updated successfully!</div>
+          <div class="alert alert-danger d-none" id="passwordError"></div>
+          
+          <div class="mb-3">
+            <label for="currentPassword" class="form-label">Current Password</label>
+            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="newPassword" name="newPassword" minlength="6" required>
+            <div class="form-text">Password must be at least 6 characters long</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="changePasswordBtn">Update Password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Load user profile data
+    loadUserProfile();
+    
+    // Save profile button click
+    document.getElementById('saveProfileBtn').addEventListener('click', saveUserProfile);
+    
+    // Change password button click
+    document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
+    
+    // Settings form submission
+    document.getElementById('settingsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // In a real app, you would save these settings to the database
+      alert('Settings saved successfully!');
+    });
+  });
+  
+  async function loadUserProfile() {
+    try {
+      const response = await fetchWithAuth('/api/auth/profile');
+      const data = await handleApiResponse(response);
+      
+      if (data && data.success) {
+        const user = data.user;
+        
+        // Update profile display
+        document.getElementById('businessNameDisplay').textContent = user.businessName;
+        document.getElementById('businessTypeDisplay').textContent = 
+          user.businessType.charAt(0).toUpperCase() + user.businessType.slice(1);
+        document.getElementById('locationDisplay').textContent = user.location;
+        document.getElementById('emailDisplay').textContent = user.email;
+        
+        // Format date
+        const createdDate = new Date(user.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('createdAtDisplay').textContent = createdDate;
+        
+        // Fill form fields
+        document.getElementById('businessName').value = user.businessName;
+        document.getElementById('businessType').value = user.businessType;
+        document.getElementById('location').value = user.location;
+        document.getElementById('email').value = user.email;
+        
+        // Set last login date to today (for demo)
+        const today = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        document.getElementById('lastLoginDate').textContent = today;
+      } else {
+        console.error('Failed to load profile:', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+  
+  async function saveUserProfile() {
+    const businessName = document.getElementById('businessName').value;
+    const businessType = document.getElementById('businessType').value;
+    const location = document.getElementById('location').value;
+    const email = document.getElementById('email').value;
+    
+    const successElement = document.getElementById('profileSuccess');
+    const errorElement = document.getElementById('profileError');
+    
+    try {
+      const response = await fetchWithAuth('/api/auth/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          businessName,
+          businessType,
+          location,
+          email
+        })
+      });
+      
+      const data = await handleApiResponse(response);
+      
+      if (data && data.success) {
+        // Show success message
+        successElement.classList.remove('d-none');
+        errorElement.classList.add('d-none');
+        
+        // Update token if it's changed
+        if (data.user.token) {
+          localStorage.setItem('token', data.user.token);
+        }
+        
+        // Update profile display
+        document.getElementById('businessNameDisplay').textContent = businessName;
+        document.getElementById('businessTypeDisplay').textContent = 
+          businessType.charAt(0).toUpperCase() + businessType.slice(1);
+        document.getElementById('locationDisplay').textContent = location;
+        document.getElementById('emailDisplay').textContent = email;
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          successElement.classList.add('d-none');
+          // Close modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+          modal.hide();
+        }, 3000);
+      } else {
+        // Show error message
+        errorElement.textContent = data.message || 'Failed to update profile. Please try again.';
+        errorElement.classList.remove('d-none');
+        successElement.classList.add('d-none');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      errorElement.textContent = 'Server error. Please try again later.';
+      errorElement.classList.remove('d-none');
+      successElement.classList.add('d-none');
+    }
+  }
+  
+  async function changePassword() {
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    const successElement = document.getElementById('passwordSuccess');
+    const errorElement = document.getElementById('passwordError');
+    
+    // Basic validation
+    if (newPassword !== confirmPassword) {
+      errorElement.textContent = 'New passwords do not match';
+      errorElement.classList.remove('d-none');
+      successElement.classList.add('d-none');
+      return;
+    }
+    
+    // In a real app, you would make an API call to update the password
+    // This is just a simulation
+    
+    successElement.classList.remove('d-none');
+    errorElement.classList.add('d-none');
+    
+    // Reset form
+    document.getElementById('changePasswordForm').reset();
+    
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      successElement.classList.add('d-none');
+      // Close modal
+      const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+      modal.hide();
+    }, 3000);
+  }
+</script>
+
+<%- include('./partials/footer') %> 

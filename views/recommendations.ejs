@@ -1,0 +1,369 @@
+<%- include('./partials/header') %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card bg-gradient-primary text-white shadow-lg border-0">
+      <div class="card-body p-4">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h1 class="display-5 fw-bold">AI-Generated Recommendations</h1>
+            <p class="lead">These customized recommendations are based on your business data and market trends, analyzed by our AI.</p>
+          </div>
+          <div class="col-md-4 text-center d-none d-md-block">
+            <i class="fas fa-lightbulb fa-5x text-white-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-filter text-primary me-2"></i>Filter Recommendations</h5>
+        <div class="btn-group filter-buttons" role="group" aria-label="Priority filter buttons">
+          <button class="btn btn-outline-primary active" id="filter-all">All</button>
+          <button class="btn btn-outline-primary" id="filter-high">High Priority</button>
+          <button class="btn btn-outline-primary" id="filter-medium">Medium Priority</button>
+          <button class="btn btn-outline-primary" id="filter-low">Low Priority</button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="recommendations-container">
+          <div class="list-group list-group-flush" id="recommendationsList">
+            <!-- This section will be filled with real data from the API -->
+            <div class="text-center py-4" id="loading">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2">Loading recommendations...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // References to DOM elements
+  const recommendationsList = document.getElementById('recommendationsList');
+  const loading = document.getElementById('loading');
+  const filterAll = document.getElementById('filter-all');
+  const filterHigh = document.getElementById('filter-high');
+  const filterMedium = document.getElementById('filter-medium');
+  const filterLow = document.getElementById('filter-low');
+  
+  // Priority badge classes
+  const priorityClasses = {
+    high: 'bg-danger',
+    medium: 'bg-warning',
+    low: 'bg-info'
+  };
+  
+  // Function to render recommendations
+  function renderRecommendations(recommendations) {
+    if (recommendations.length === 0) {
+      recommendationsList.innerHTML = `
+        <div class="empty-state p-5">
+          <i class="fas fa-clipboard-list text-primary mb-3"></i>
+          <h5>No recommendations found</h5>
+          <p class="text-muted">We couldn't find any recommendations matching your criteria.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    let html = '';
+    recommendations.forEach(recommendation => {
+      html += `
+        <div class="list-group-item list-group-item-action p-4 recommendation" data-priority="${recommendation.priority}">
+          <div class="d-flex w-100 justify-content-between align-items-start mb-2">
+            <h5 class="mb-1 fw-bold">${recommendation.title}</h5>
+            <div>
+              <span class="badge ${priorityClasses[recommendation.priority]} me-2">${recommendation.priority.charAt(0).toUpperCase() + recommendation.priority.slice(1)} Priority</span>
+              <span class="badge bg-secondary">Confidence: ${(recommendation.confidence * 100).toFixed(0)}%</span>
+            </div>
+          </div>
+          <p class="mb-3">${recommendation.description}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted">Category: ${recommendation.category.charAt(0).toUpperCase() + recommendation.category.slice(1)}</small>
+            <div>
+              <button class="btn btn-sm btn-outline-primary implement-btn me-2">
+                <i class="fas fa-check me-1"></i> Mark as Implemented
+              </button>
+              <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${recommendation._id || ''}">
+                <i class="fas fa-trash-alt me-1"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    recommendationsList.innerHTML = html;
+    
+    // Add event listeners to implement buttons
+    document.querySelectorAll('.implement-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const item = this.closest('.list-group-item');
+        
+        if (item.classList.contains('implemented')) {
+          item.classList.remove('implemented', 'bg-light');
+          this.innerHTML = '<i class="fas fa-check me-1"></i> Mark as Implemented';
+          this.classList.remove('btn-success');
+          this.classList.add('btn-outline-primary');
+        } else {
+          item.classList.add('implemented', 'bg-light');
+          this.innerHTML = '<i class="fas fa-undo me-1"></i> Undo Implementation';
+          this.classList.remove('btn-outline-primary');
+          this.classList.add('btn-success');
+        }
+      });
+    });
+    
+    // Add event listeners to delete buttons
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (confirm('Are you sure you want to delete this recommendation?')) {
+          const item = this.closest('.list-group-item');
+          const recommendationId = this.getAttribute('data-id');
+          
+          try {
+            // If it's a sample recommendation (no ID), just remove from UI
+            if (!recommendationId) {
+              item.remove();
+              return;
+            }
+            
+            // For real recommendations, call the API
+            const response = await fetch(`/api/analysis/recommendations/${recommendationId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) {
+              // Remove the item from the UI
+              item.remove();
+              
+              // Check if we have any recommendations left
+              if (document.querySelectorAll('.recommendation').length === 0) {
+                recommendationsList.innerHTML = `
+                  <div class="empty-state p-5">
+                    <i class="fas fa-clipboard-list text-primary mb-3"></i>
+                    <h5>No recommendations found</h5>
+                    <p class="text-muted">All recommendations have been deleted. Generate new ones from your data.</p>
+                  </div>
+                `;
+              }
+            } else {
+              const errorData = await response.json();
+              alert(errorData.message || 'Failed to delete recommendation. Please try again.');
+            }
+          } catch (error) {
+            console.error('Error deleting recommendation:', error);
+            alert('An error occurred while trying to delete the recommendation.');
+          }
+        }
+      });
+    });
+  }
+  
+  // Function to fetch recommendations from API
+  async function fetchRecommendations() {
+    try {
+      loading.style.display = 'block';
+      
+      const response = await fetch('/api/analysis/recommendations', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        const statusCode = response.status;
+        
+        loading.style.display = 'none';
+        
+        if (statusCode === 401) {
+          // Not authenticated error
+          recommendationsList.innerHTML = `
+            <div class="empty-state p-5">
+              <i class="fas fa-lock text-warning mb-3"></i>
+              <h5>Authentication Required</h5>
+              <p class="text-muted">Please <a href="/login" class="text-primary">login</a> or <a href="/register" class="text-primary">register</a> to view personalized recommendations.</p>
+            </div>
+          `;
+        } else if (statusCode === 404) {
+          // No data uploaded yet
+          recommendationsList.innerHTML = `
+            <div class="empty-state p-5">
+              <i class="fas fa-cloud-upload-alt text-primary mb-3"></i>
+              <h5>No Data Available</h5>
+              <p class="text-muted">Please upload your business data to receive AI-powered recommendations.</p>
+              <a href="/data" class="btn btn-outline-primary mt-3">Upload Data</a>
+            </div>
+          `;
+        } else {
+          // General error
+          recommendationsList.innerHTML = `
+            <div class="empty-state p-5">
+              <i class="fas fa-exclamation-triangle text-warning mb-3"></i>
+              <h5>Unable to load recommendations</h5>
+              <p class="text-muted">${errorData.message || 'Something went wrong. Please try again later.'}</p>
+            </div>
+          `;
+        }
+        
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        loading.style.display = 'none';
+        
+        if (data.recommendations && data.recommendations.length > 0) {
+          renderRecommendations(data.recommendations);
+        } else {
+          // Empty recommendations array
+          recommendationsList.innerHTML = `
+            <div class="empty-state p-5">
+              <i class="fas fa-lightbulb text-primary mb-3"></i>
+              <h5>No Recommendations Yet</h5>
+              <p class="text-muted">${data.message || 'We don\'t have any recommendations for you yet. Check back later or upload more data for better insights.'}</p>
+              <a href="/data" class="btn btn-outline-primary mt-3">Upload More Data</a>
+            </div>
+          `;
+        }
+      } else {
+        throw new Error(data.message || 'Failed to fetch recommendations');
+      }
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+      loading.style.display = 'none';
+      recommendationsList.innerHTML = `
+        <div class="empty-state p-5">
+          <i class="fas fa-exclamation-triangle text-warning mb-3"></i>
+          <h5>Unable to load recommendations</h5>
+          <p class="text-muted">There was a problem connecting to the server. Please try again later.</p>
+        </div>
+      `;
+    }
+  }
+  
+  // Filter recommendations
+  function filterRecommendations(priority) {
+    const recommendations = document.querySelectorAll('.recommendation');
+    let visibleCount = 0;
+    
+    recommendations.forEach(item => {
+      if (priority === 'all' || item.dataset.priority === priority) {
+        item.style.display = 'block';
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    
+    // Show empty state if no items match the filter
+    const emptyState = document.querySelector('.empty-state');
+    if (visibleCount === 0 && !emptyState) {
+      const emptyStateHtml = `
+        <div class="empty-state p-5">
+          <i class="fas fa-filter text-primary mb-3"></i>
+          <h5>No ${priority} priority recommendations</h5>
+          <p class="text-muted">We couldn't find any recommendations with ${priority} priority. Try a different filter.</p>
+        </div>
+      `;
+      recommendations[0].insertAdjacentHTML('beforebegin', emptyStateHtml);
+    } else if (visibleCount > 0 && emptyState) {
+      emptyState.remove();
+    }
+  }
+  
+  // Filter button event listeners
+  filterAll.addEventListener('click', () => {
+    setActiveFilter(filterAll);
+    filterRecommendations('all');
+  });
+  
+  filterHigh.addEventListener('click', () => {
+    setActiveFilter(filterHigh);
+    filterRecommendations('high');
+  });
+  
+  filterMedium.addEventListener('click', () => {
+    setActiveFilter(filterMedium);
+    filterRecommendations('medium');
+  });
+  
+  filterLow.addEventListener('click', () => {
+    setActiveFilter(filterLow);
+    filterRecommendations('low');
+  });
+  
+  function setActiveFilter(activeButton) {
+    [filterAll, filterHigh, filterMedium, filterLow].forEach(button => {
+      button.classList.remove('active');
+    });
+    activeButton.classList.add('active');
+  }
+  
+  // Initialize
+  fetchRecommendations();
+});
+</script>
+
+<style>
+  .recommendations-container {
+    min-height: 400px;
+  }
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+  }
+  
+  .empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .recommendation.implemented {
+    transition: all 0.3s ease;
+  }
+  
+  .recommendation.implemented h5 {
+    text-decoration: line-through;
+    color: #6c757d;
+  }
+  
+  @media (max-width: 767.98px) {
+    .filter-buttons {
+      flex-wrap: wrap;
+    }
+    
+    .filter-buttons .btn {
+      flex: 1 0 auto;
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>
+
+<%- include('./partials/footer') %> 

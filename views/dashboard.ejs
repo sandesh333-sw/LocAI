@@ -1,0 +1,382 @@
+<%- include('./partials/header') %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card bg-gradient-primary text-white shadow-lg border-0">
+      <div class="card-body p-5">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h1 class="display-4 fw-bold">Welcome to Your Business Dashboard</h1>
+            <p class="lead">Get actionable insights and AI-powered recommendations to help your business grow.</p>
+            <div class="mt-4">
+              <a href="/data" class="btn btn-light me-2">Upload Data</a>
+              <a href="/recommendations" class="btn btn-outline-light">View Recommendations</a>
+            </div>
+          </div>
+          <div class="col-md-4 text-center d-none d-md-block">
+            <i class="fas fa-chart-line fa-6x text-white-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-dollar-sign fa-3x text-success"></i>
+        </div>
+        <h5 class="card-title">Total Sales</h5>
+        <h3 class="card-text" id="totalSales">$12,845</h3>
+        <p class="text-muted"><i class="fas fa-arrow-up text-success"></i> 12% from last month</p>
+      </div>
+      <div class="card-footer bg-transparent border-0">
+        <a href="/data" class="btn btn-sm btn-outline-secondary w-100">View Details</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-users fa-3x text-primary"></i>
+        </div>
+        <h5 class="card-title">Customer Count</h5>
+        <h3 class="card-text" id="customerCount">427</h3>
+        <p class="text-muted"><i class="fas fa-arrow-up text-success"></i> 8% from last month</p>
+      </div>
+      <div class="card-footer bg-transparent border-0">
+        <a href="/data" class="btn btn-sm btn-outline-secondary w-100">View Details</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body text-center">
+        <div class="mb-3">
+          <i class="fas fa-shopping-cart fa-3x text-info"></i>
+        </div>
+        <h5 class="card-title">Average Sale</h5>
+        <h3 class="card-text" id="avgSale">$30.08</h3>
+        <p class="text-muted"><i class="fas fa-arrow-up text-success"></i> 5% from last month</p>
+      </div>
+      <div class="card-footer bg-transparent border-0">
+        <a href="/data" class="btn btn-sm btn-outline-secondary w-100">View Details</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Sales Overview</h5>
+        <div class="btn-group period-selector">
+          <button class="btn btn-sm btn-outline-secondary" data-period="day">Day</button>
+          <button class="btn btn-sm btn-outline-secondary active" data-period="week">Week</button>
+          <button class="btn btn-sm btn-outline-secondary" data-period="month">Month</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="salesChart" height="250"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">Top Products</h5>
+      </div>
+      <div class="card-body">
+        <canvas id="productsChart" height="250"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-white">
+        <h5 class="mb-0"><i class="fas fa-lightbulb text-warning me-2"></i>AI Insights</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush" id="insights">
+          <a href="#" class="list-group-item list-group-item-action p-3">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1 fw-bold">Peak Sales Hours</h6>
+              <span class="badge bg-success rounded-pill">85%</span>
+            </div>
+            <p class="mb-1">Your business experiences highest sales between 2PM and 5PM on weekdays.</p>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action p-3">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1 fw-bold">Customer Retention</h6>
+              <span class="badge bg-success rounded-pill">92%</span>
+            </div>
+            <p class="mb-1">Your customer retention rate is 68%, above industry average.</p>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action p-3">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1 fw-bold">Seasonal Trends</h6>
+              <span class="badge bg-primary rounded-pill">78%</span>
+            </div>
+            <p class="mb-1">Sales increase by 32% during holidays and drop by 18% in summer.</p>
+          </a>
+        </div>
+      </div>
+      <div class="card-footer text-center bg-transparent">
+        <a href="/insights" class="btn btn-outline-primary">View All Insights</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 mb-4">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-bullseye text-danger me-2"></i>AI Recommendations</h5>
+        <button class="btn btn-sm btn-outline-secondary refresh-recommendations">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </div>
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush" id="recommendationsList">
+          <a href="#" class="list-group-item list-group-item-action p-3">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1 fw-bold">Optimize Staffing Schedules</h6>
+              <span class="badge bg-danger">High Priority</span>
+            </div>
+            <p class="mb-1 text-muted">Based on foot traffic patterns, adjusting staff schedules could increase efficiency by 15%.</p>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action p-3">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1 fw-bold">Implement Customer Loyalty Program</h6>
+              <span class="badge bg-warning text-dark">Medium Priority</span>
+            </div>
+            <p class="mb-1 text-muted">Based on customer retention data, a loyalty program could increase repeat purchases by 22%.</p>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action p-3">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1 fw-bold">Adjust Inventory for Summer Season</h6>
+              <span class="badge bg-warning text-dark">Medium Priority</span>
+            </div>
+            <p class="mb-1 text-muted">Based on seasonal sales trends, preparing inventory adjustments could prevent stockouts.</p>
+          </a>
+        </div>
+      </div>
+      <div class="card-footer text-center bg-transparent">
+        <a href="/recommendations" class="btn btn-primary">View All Recommendations</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="login-prompt-container my-4 d-none" id="loginPrompt">
+  <div class="card border-primary">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h4 class="text-primary mb-2">Unlock More Features</h4>
+          <p class="mb-0">Sign in to access detailed analytics, personalized recommendations, and data management tools.</p>
+        </div>
+        <div class="col-md-4 text-end">
+          <a href="/login" class="btn btn-primary me-2">Sign In</a>
+          <a href="/register" class="btn btn-outline-primary">Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Sample data for charts
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check login status and show/hide elements accordingly
+    const isLoggedIn = localStorage.getItem('token') ? true : false;
+    const loginPrompt = document.getElementById('loginPrompt');
+    
+    if (!isLoggedIn) {
+      loginPrompt.classList.remove('d-none');
+    }
+    
+    // Sales Chart data
+    const dailyData = {
+      labels: ['8AM', '10AM', '12PM', '2PM', '4PM', '6PM', '8PM'],
+      data: [400, 900, 1200, 1500, 1300, 1100, 600]
+    };
+    
+    const weeklyData = {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      data: [1200, 1900, 1500, 1800, 2100, 2500, 1700]
+    };
+    
+    const monthlyData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      data: [5000, 5500, 6800, 7200, 8000, 7500, 7800, 8500, 9000, 9500, 11000, 12000]
+    };
+    
+    // Initialize sales chart with weekly data
+    let currentPeriod = 'week';
+    let salesChart;
+    
+    function initializeSalesChart(period) {
+      const salesCtx = document.getElementById('salesChart').getContext('2d');
+      
+      let chartData;
+      if (period === 'day') {
+        chartData = dailyData;
+      } else if (period === 'month') {
+        chartData = monthlyData;
+      } else {
+        chartData = weeklyData; // default to week
+      }
+      
+      // If chart already exists, destroy it
+      if (salesChart) {
+        salesChart.destroy();
+      }
+      
+      // Create new chart
+      salesChart = new Chart(salesCtx, {
+        type: 'line',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            label: 'Sales ($)',
+            data: chartData.data,
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return '$' + value;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Initialize sales chart with default period (weekly)
+    initializeSalesChart(currentPeriod);
+    
+    // Add event listeners to period selector buttons
+    document.querySelectorAll('.period-selector button').forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.period-selector button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Update chart with selected period data
+        const period = this.dataset.period;
+        currentPeriod = period;
+        initializeSalesChart(period);
+      });
+    });
+
+    // Products Chart
+    const productsCtx = document.getElementById('productsChart').getContext('2d');
+    const productsChart = new Chart(productsCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Others'],
+        datasets: [{
+          data: [30, 25, 20, 15, 10],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.8)',
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(75, 192, 192, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(153, 102, 255, 0.8)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 12
+            }
+          }
+        }
+      }
+    });
+    
+    // Refresh recommendations button
+    document.querySelector('.refresh-recommendations').addEventListener('click', function() {
+      const button = this;
+      button.disabled = true;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      
+      // Simulate refreshing data after delay
+      setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-sync-alt"></i>';
+      }, 1500);
+    });
+  });
+</script>
+
+<style>
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  }
+  .card {
+    transition: all 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+  }
+  .shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+  }
+  .shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+  }
+</style>
+
+<%- include('./partials/footer') %> 

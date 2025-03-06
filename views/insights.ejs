@@ -1,0 +1,606 @@
+<%- include('./partials/header') %>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card bg-primary text-white">
+      <div class="card-body">
+        <h2>AI-Powered Business Insights</h2>
+        <p class="lead">Discover actionable insights and recommendations based on your business data.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Generate New Insights</h5>
+      </div>
+      <div class="card-body">
+        <form id="insightForm" class="row g-3">
+          <div class="col-md-4">
+            <label for="analysisType" class="form-label">Analysis Type</label>
+            <select class="form-select" id="analysisType" name="analysisType" required>
+              <option value="sales">Sales Analysis</option>
+              <option value="customer">Customer Behavior</option>
+              <option value="market">Market Trends</option>
+              <option value="recommendation">General Recommendations</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" required>
+          </div>
+          <div class="col-md-4">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="endDate" name="endDate" required>
+          </div>
+          <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5">
+              <i class="fas fa-brain me-2"></i> Generate Insights
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Current Insights</h5>
+        <span class="badge bg-success" id="confidenceScore">Confidence Score: 85%</span>
+      </div>
+      <div class="card-body">
+        <div id="loadingIndicator" class="text-center p-5 d-none">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">Analyzing your data and generating insights...</p>
+        </div>
+        
+        <div id="insightsContainer">
+          <div class="alert alert-info" id="noInsightsMessage">
+            <i class="fas fa-info-circle me-2"></i> No insights available. Generate your first business insight using the form above.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Advanced Visualizations</h5>
+      </div>
+      <div class="card-body">
+        <ul class="nav nav-tabs" id="visualizationTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales" type="button" role="tab">Sales Trends</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab">Customer Analysis</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="traffic-tab" data-bs-toggle="tab" data-bs-target="#traffic" type="button" role="tab">Foot Traffic</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="forecast-tab" data-bs-toggle="tab" data-bs-target="#forecast" type="button" role="tab">Forecasts</button>
+          </li>
+        </ul>
+        <div class="tab-content p-3" id="visualizationTabsContent">
+          <div class="tab-pane fade show active" id="sales" role="tabpanel">
+            <div class="row">
+              <div class="col-12 mb-4">
+                <canvas id="salesTrendChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="categorySalesChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="weekdaySalesChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="customers" role="tabpanel">
+            <div class="row">
+              <div class="col-12 mb-4">
+                <canvas id="customerRetentionChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="customerTypeChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="customerFrequencyChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="traffic" role="tabpanel">
+            <div class="row">
+              <div class="col-12 mb-4">
+                <canvas id="trafficHeatmapChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="peakHoursChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="trafficConversionChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="forecast" role="tabpanel">
+            <div class="row">
+              <div class="col-12 mb-4">
+                <canvas id="salesForecastChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="seasonalityChart" height="300"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="demandPredictionChart" height="300"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Top Recommendations</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush" id="recommendationsList">
+          <!-- Will be populated by JavaScript -->
+          <div class="list-group-item text-center p-4">
+            <i class="fas fa-spinner fa-spin mb-3"></i>
+            <p>Loading recommendations...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Insight History</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="list-group list-group-flush" id="insightHistoryList">
+          <!-- Will be populated by JavaScript -->
+          <div class="list-group-item text-center p-4">
+            <i class="fas fa-spinner fa-spin mb-3"></i>
+            <p>Loading history...</p>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button id="loadMoreInsights" class="btn btn-sm btn-outline-primary">Load More</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set default dates for the form
+    const today = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(today.getMonth() - 1);
+    
+    document.getElementById('startDate').valueAsDate = oneMonthAgo;
+    document.getElementById('endDate').valueAsDate = today;
+    
+    // Initialize charts
+    initializeCharts();
+    
+    // Load existing insights and recommendations
+    loadInsights();
+    
+    // Insight form submission
+    document.getElementById('insightForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const analysisType = document.getElementById('analysisType').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      
+      // Show loading indicator
+      document.getElementById('loadingIndicator').classList.remove('d-none');
+      document.getElementById('insightsContainer').classList.add('d-none');
+      
+      try {
+        const response = await fetchWithAuth('/api/analysis/recommendations', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await handleApiResponse(response);
+        
+        if (data && data.success) {
+          // Hide loading indicator
+          document.getElementById('loadingIndicator').classList.add('d-none');
+          document.getElementById('insightsContainer').classList.remove('d-none');
+          
+          // Process and display insights
+          displayInsights(data.analysis);
+          
+          // Reload charts with new data
+          updateChartsWithData(data.analysis);
+        } else {
+          // Show error
+          document.getElementById('loadingIndicator').classList.add('d-none');
+          document.getElementById('insightsContainer').classList.remove('d-none');
+          document.getElementById('insightsContainer').innerHTML = `
+            <div class="alert alert-danger">
+              <i class="fas fa-exclamation-circle me-2"></i> ${data.message || 'Failed to generate insights. Please try again.'}
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loadingIndicator').classList.add('d-none');
+        document.getElementById('insightsContainer').classList.remove('d-none');
+        document.getElementById('insightsContainer').innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i> Server error. Please try again later.
+          </div>
+        `;
+      }
+    });
+  });
+  
+  async function loadInsights() {
+    try {
+      const response = await fetchWithAuth('/api/analysis');
+      const data = await handleApiResponse(response);
+      
+      if (data && data.success && data.analyses.length > 0) {
+        // Get the most recent analysis
+        const latestAnalysis = data.analyses[0];
+        
+        // Display insights
+        displayInsights(latestAnalysis);
+        
+        // Update confidence score
+        updateConfidenceScore(latestAnalysis);
+        
+        // Update charts
+        updateChartsWithData(latestAnalysis);
+        
+        // Build history list
+        buildInsightHistoryList(data.analyses);
+      } else {
+        // No insights available
+        document.getElementById('noInsightsMessage').classList.remove('d-none');
+        document.getElementById('recommendationsList').innerHTML = `
+          <div class="list-group-item text-center p-4">
+            <i class="fas fa-lightbulb mb-3 text-warning fa-2x"></i>
+            <p>No recommendations yet. Generate your first insight to get started.</p>
+          </div>
+        `;
+        document.getElementById('insightHistoryList').innerHTML = `
+          <div class="list-group-item text-center p-4">
+            <p>No previous insights found.</p>
+          </div>
+        `;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('insightsContainer').innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle me-2"></i> Error loading insights. Please try again later.
+        </div>
+      `;
+    }
+  }
+  
+  function displayInsights(analysis) {
+    if (!analysis || !analysis.insights || analysis.insights.length === 0) {
+      document.getElementById('noInsightsMessage').classList.remove('d-none');
+      return;
+    }
+    
+    // Hide no insights message
+    document.getElementById('noInsightsMessage').classList.add('d-none');
+    
+    // Build insights container
+    const insightsContainer = document.getElementById('insightsContainer');
+    insightsContainer.innerHTML = '';
+    
+    // Add insights
+    analysis.insights.forEach(insight => {
+      const confidencePercentage = Math.round(insight.confidenceScore * 100);
+      const confidenceClass = confidencePercentage >= 80 ? 'success' : (confidencePercentage >= 60 ? 'warning' : 'danger');
+      
+      insightsContainer.innerHTML += `
+        <div class="card mb-3 insight-card">
+          <div class="card-body">
+            <h5 class="card-title">${insight.title}</h5>
+            <p class="card-text">${insight.description}</p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="badge bg-${confidenceClass}">Confidence: ${confidencePercentage}%</span>
+              <button class="btn btn-sm btn-outline-primary">Explore Details</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    // Build recommendations list
+    if (analysis.recommendations && analysis.recommendations.length > 0) {
+      const recommendationsList = document.getElementById('recommendationsList');
+      recommendationsList.innerHTML = '';
+      
+      analysis.recommendations.forEach(rec => {
+        const priorityClass = rec.priority === 'high' ? 'danger' : (rec.priority === 'medium' ? 'warning' : 'info');
+        
+        recommendationsList.innerHTML += `
+          <div class="list-group-item p-3">
+            <div class="d-flex w-100 justify-content-between mb-2">
+              <h6 class="mb-0">${rec.title}</h6>
+              <span class="badge bg-${priorityClass}">${rec.priority.charAt(0).toUpperCase() + rec.priority.slice(1)}</span>
+            </div>
+            <p class="mb-2 text-muted small">${rec.description}</p>
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#actionItems${analysis.recommendations.indexOf(rec)}">
+                Action Items
+              </button>
+              <div class="collapse" id="actionItems${analysis.recommendations.indexOf(rec)}">
+                <ul class="list-group list-group-flush small mt-2">
+                  ${rec.actionItems.map(item => `<li class="list-group-item py-1">${item}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+  }
+  
+  function updateConfidenceScore(analysis) {
+    if (!analysis || !analysis.insights || analysis.insights.length === 0) return;
+    
+    // Calculate average confidence score
+    const totalConfidence = analysis.insights.reduce((sum, insight) => sum + insight.confidenceScore, 0);
+    const avgConfidence = totalConfidence / analysis.insights.length;
+    const confidencePercentage = Math.round(avgConfidence * 100);
+    
+    // Update confidence badge
+    const confidenceElement = document.getElementById('confidenceScore');
+    confidenceElement.textContent = `Confidence Score: ${confidencePercentage}%`;
+    
+    // Update badge color
+    confidenceElement.className = confidencePercentage >= 80 ? 'badge bg-success' : 
+                                (confidencePercentage >= 60 ? 'badge bg-warning' : 'badge bg-danger');
+  }
+  
+  function buildInsightHistoryList(analyses) {
+    if (!analyses || analyses.length === 0) return;
+    
+    const historyList = document.getElementById('insightHistoryList');
+    historyList.innerHTML = '';
+    
+    // Show only the most recent 5 analyses
+    const recentAnalyses = analyses.slice(0, 5);
+    
+    recentAnalyses.forEach(analysis => {
+      const date = new Date(analysis.createdAt).toLocaleDateString();
+      const time = new Date(analysis.createdAt).toLocaleTimeString();
+      
+      historyList.innerHTML += `
+        <a href="#" class="list-group-item list-group-item-action p-3" data-id="${analysis._id}">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">${analysis.analysisType.charAt(0).toUpperCase() + analysis.analysisType.slice(1)} Analysis</h6>
+            <small class="text-muted">${date}</small>
+          </div>
+          <p class="mb-1 small text-muted">${analysis.insights.length} insights, ${analysis.recommendations.length} recommendations</p>
+          <small>${time}</small>
+        </a>
+      `;
+    });
+    
+    // Add event listeners to history items
+    document.querySelectorAll('#insightHistoryList a').forEach(item => {
+      item.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const analysisId = item.getAttribute('data-id');
+        
+        try {
+          const response = await fetchWithAuth(`/api/analysis/${analysisId}`);
+          const data = await handleApiResponse(response);
+          
+          if (data && data.success) {
+            displayInsights(data.analysis);
+            updateConfidenceScore(data.analysis);
+            updateChartsWithData(data.analysis);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      });
+    });
+  }
+  
+  function initializeCharts() {
+    // Create empty charts with placeholders
+    
+    // Sales Trend Chart
+    const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
+    const salesTrendChart = new Chart(salesTrendCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Monthly Sales',
+          data: [65, 59, 80, 81, 56, 55],
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sales Trend Over Time'
+          }
+        }
+      }
+    });
+    
+    // Category Sales Chart
+    const categorySalesCtx = document.getElementById('categorySalesChart').getContext('2d');
+    const categorySalesChart = new Chart(categorySalesCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Category A', 'Category B', 'Category C', 'Category D'],
+        datasets: [{
+          data: [30, 50, 20, 10],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(255, 206, 86, 0.7)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sales by Category'
+          }
+        }
+      }
+    });
+    
+    // Weekday Sales Chart
+    const weekdaySalesCtx = document.getElementById('weekdaySalesChart').getContext('2d');
+    const weekdaySalesChart = new Chart(weekdaySalesCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Average Sales',
+          data: [65, 59, 80, 81, 56, 55, 40],
+          backgroundColor: 'rgba(54, 162, 235, 0.7)'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sales by Day of Week'
+          }
+        }
+      }
+    });
+    
+    // Initialize more charts for other tabs as needed
+    // Customer Retention Chart
+    const customerRetentionCtx = document.getElementById('customerRetentionChart').getContext('2d');
+    const customerRetentionChart = new Chart(customerRetentionCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+        datasets: [{
+          label: 'New Customers',
+          data: [50, 40, 45, 30, 25, 35],
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.1)',
+          fill: true
+        }, {
+          label: 'Returning Customers',
+          data: [20, 25, 30, 35, 40, 45],
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.1)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Customer Retention Over Time'
+          }
+        }
+      }
+    });
+    
+    // Initialize forecast charts
+    const salesForecastCtx = document.getElementById('salesForecastChart').getContext('2d');
+    const salesForecastChart = new Chart(salesForecastCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+        datasets: [{
+          label: 'Actual Sales',
+          data: [65, 59, 80, 81, 56, 55],
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.1)',
+          fill: true
+        }, {
+          label: 'Forecast',
+          data: [null, null, null, null, null, null, 60, 70, 75],
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderDash: [5, 5],
+          backgroundColor: 'rgba(255, 99, 132, 0.1)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Sales Forecast'
+          }
+        }
+      }
+    });
+  }
+  
+  function updateChartsWithData(analysis) {
+    // In a real application, you would update the charts with actual data from the analysis
+    // For this example, we're just simulating chart updates
+    
+    if (!analysis || !analysis.charts || analysis.charts.length === 0) return;
+    
+    // Find specific chart data in the analysis
+    const salesTrendData = analysis.charts.find(chart => chart.title === 'Sales Trend Over Time');
+    if (salesTrendData) {
+      // Update sales trend chart
+      const salesTrendChart = Chart.getChart('salesTrendChart');
+      if (salesTrendChart) {
+        salesTrendChart.data = salesTrendData.data;
+        salesTrendChart.update();
+      }
+    }
+    
+    // Update other charts similarly
+    const categorySalesData = analysis.charts.find(chart => chart.title === 'Sales by Category');
+    if (categorySalesData) {
+      const categorySalesChart = Chart.getChart('categorySalesChart');
+      if (categorySalesChart) {
+        categorySalesChart.data = categorySalesData.data;
+        categorySalesChart.update();
+      }
+    }
+  }
+</script>
+
+<%- include('./partials/footer') %> 
