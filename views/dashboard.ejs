@@ -30,8 +30,8 @@
           <i class="fas fa-dollar-sign fa-3x text-success"></i>
         </div>
         <h5 class="card-title">Total Sales</h5>
-        <h3 class="card-text" id="totalSales">$12,845</h3>
-        <p class="text-muted"><i class="fas fa-arrow-up text-success"></i> 12% from last month</p>
+        <h3 class="card-text" id="totalSales">$0.00</h3>
+        <p class="text-muted" id="salesChange"><i class="fas fa-arrow-up text-success"></i> <span id="salesChangePercent">0</span>% from last month</p>
       </div>
       <div class="card-footer bg-transparent border-0">
         <a href="/data" class="btn btn-sm btn-outline-secondary w-100">View Details</a>
@@ -45,8 +45,8 @@
           <i class="fas fa-users fa-3x text-primary"></i>
         </div>
         <h5 class="card-title">Customer Count</h5>
-        <h3 class="card-text" id="customerCount">427</h3>
-        <p class="text-muted"><i class="fas fa-arrow-up text-success"></i> 8% from last month</p>
+        <h3 class="card-text" id="customerCount">0</h3>
+        <p class="text-muted" id="customerChange"><i class="fas fa-arrow-up text-success"></i> <span id="customerChangePercent">0</span>% from last month</p>
       </div>
       <div class="card-footer bg-transparent border-0">
         <a href="/data" class="btn btn-sm btn-outline-secondary w-100">View Details</a>
@@ -60,8 +60,8 @@
           <i class="fas fa-shopping-cart fa-3x text-info"></i>
         </div>
         <h5 class="card-title">Average Sale</h5>
-        <h3 class="card-text" id="avgSale">$30.08</h3>
-        <p class="text-muted"><i class="fas fa-arrow-up text-success"></i> 5% from last month</p>
+        <h3 class="card-text" id="avgSale">$0.00</h3>
+        <p class="text-muted" id="avgSaleChange"><i class="fas fa-arrow-up text-success"></i> <span id="avgSaleChangePercent">0</span>% from last month</p>
       </div>
       <div class="card-footer bg-transparent border-0">
         <a href="/data" class="btn btn-sm btn-outline-secondary w-100">View Details</a>
@@ -99,77 +99,40 @@
 </div>
 
 <div class="row mb-4">
-  <div class="col-md-6">
-    <div class="card shadow-sm border-0">
-      <div class="card-header bg-white">
-        <h5 class="mb-0"><i class="fas fa-lightbulb text-warning me-2"></i>AI Insights</h5>
-      </div>
-      <div class="card-body p-0">
-        <div class="list-group list-group-flush" id="insights">
-          <a href="#" class="list-group-item list-group-item-action p-3">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1 fw-bold">Peak Sales Hours</h6>
-              <span class="badge bg-success rounded-pill">85%</span>
-            </div>
-            <p class="mb-1">Your business experiences highest sales between 2PM and 5PM on weekdays.</p>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action p-3">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1 fw-bold">Customer Retention</h6>
-              <span class="badge bg-success rounded-pill">92%</span>
-            </div>
-            <p class="mb-1">Your customer retention rate is 68%, above industry average.</p>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action p-3">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1 fw-bold">Seasonal Trends</h6>
-              <span class="badge bg-primary rounded-pill">78%</span>
-            </div>
-            <p class="mb-1">Sales increase by 32% during holidays and drop by 18% in summer.</p>
-          </a>
-        </div>
-      </div>
-      <div class="card-footer text-center bg-transparent">
-        <a href="/insights" class="btn btn-outline-primary">View All Insights</a>
-      </div>
-    </div>
-  </div>
-  
-  <div class="col-md-6 mb-4">
+  <div class="col-md-12">
     <div class="card shadow-sm border-0 h-100">
       <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <h5 class="mb-0"><i class="fas fa-bullseye text-danger me-2"></i>AI Recommendations</h5>
+        <h5 class="mb-0"><i class="fas fa-bullseye text-danger me-2"></i>Recommendations</h5>
         <button class="btn btn-sm btn-outline-secondary refresh-recommendations">
           <i class="fas fa-sync-alt"></i>
         </button>
       </div>
       <div class="card-body p-0">
         <div class="list-group list-group-flush" id="recommendationsList">
-          <a href="#" class="list-group-item list-group-item-action p-3">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1 fw-bold">Optimize Staffing Schedules</h6>
-              <span class="badge bg-danger">High Priority</span>
+          <!-- Loading placeholder -->
+          <div class="text-center p-4" id="recommendationsLoading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mb-1 text-muted">Based on foot traffic patterns, adjusting staff schedules could increase efficiency by 15%.</p>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action p-3">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1 fw-bold">Implement Customer Loyalty Program</h6>
-              <span class="badge bg-warning text-dark">Medium Priority</span>
+            <p class="mt-2 text-muted">Loading recommendations...</p>
+          </div>
+          
+          <!-- No data placeholder -->
+          <div class="text-center p-4 d-none" id="recommendationsEmpty">
+            <div class="mb-3">
+              <i class="fas fa-chart-bar fa-3x text-muted"></i>
             </div>
-            <p class="mb-1 text-muted">Based on customer retention data, a loyalty program could increase repeat purchases by 22%.</p>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action p-3">
-            <div class="d-flex w-100 justify-content-between">
-              <h6 class="mb-1 fw-bold">Adjust Inventory for Summer Season</h6>
-              <span class="badge bg-warning text-dark">Medium Priority</span>
-            </div>
-            <p class="mb-1 text-muted">Based on seasonal sales trends, preparing inventory adjustments could prevent stockouts.</p>
-          </a>
+            <h5>No Data Available</h5>
+            <p class="text-muted">Upload some data to get personalized recommendations</p>
+            <a href="/data" class="btn btn-primary">Upload Data</a>
+          </div>
+          
+          <!-- Recommendations will be loaded here dynamically -->
         </div>
       </div>
       <div class="card-footer text-center bg-transparent">
         <a href="/recommendations" class="btn btn-primary">View All Recommendations</a>
+        <button id="resetRecommendations" class="btn btn-outline-secondary ml-2 d-none">Reset Dismissed</button>
       </div>
     </div>
   </div>
@@ -192,40 +155,98 @@
   </div>
 </div>
 
+<!-- Main JavaScript for the dashboard page -->
 <script>
-  // Sample data for charts
+  // This function runs when the page is fully loaded
   document.addEventListener('DOMContentLoaded', function() {
-    // Check login status and show/hide elements accordingly
+    // Check if the user is logged in by looking for a token in localStorage
     const isLoggedIn = localStorage.getItem('token') ? true : false;
     const loginPrompt = document.getElementById('loginPrompt');
+    const resetRecommendationsBtn = document.getElementById('resetRecommendations');
+    const refreshRecommendationsBtn = document.querySelector('.refresh-recommendations');
     
+    console.log("Dashboard loaded, auth status:", isLoggedIn);
+    
+    // Show login prompt for users who aren't logged in
     if (!isLoggedIn) {
       loginPrompt.classList.remove('d-none');
+      
+      // Disable refresh button for non-logged in users
+      refreshRecommendationsBtn.classList.add('disabled');
+      refreshRecommendationsBtn.setAttribute('aria-disabled', 'true');
+      refreshRecommendationsBtn.title = 'Login to refresh recommendations';
+    } else {
+      // If logged in, load the user's real data
+      console.log("Logged in: Loading dashboard data");
+      loadDashboardData();
+      
+      // Show the reset recommendations button for logged-in users
+      resetRecommendationsBtn.classList.remove('d-none');
+      
+      // Add event listener for reset recommendations button
+      resetRecommendationsBtn.addEventListener('click', async function() {
+        try {
+          // Show loading state
+          this.disabled = true;
+          this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Resetting...';
+          
+          // Call API to reset recommendations
+          const response = await fetchWithAuth('/api/recommendations/reset', {
+            method: 'PUT'
+          });
+          
+          await handleApiResponse(response);
+          
+          // Reload recommendations
+          await loadRecommendations();
+          
+          // Reset button state
+          this.disabled = false;
+          this.innerHTML = 'Reset Dismissed';
+          
+        } catch (error) {
+          console.error('Error resetting recommendations:', error);
+          this.disabled = false;
+          this.innerHTML = 'Reset Dismissed';
+          alert('Failed to reset recommendations. Please try again.');
+        }
+      });
     }
     
-    // Sales Chart data
+    // -------- CHART SETUP --------
+    // These objects hold the data for each time period view
+    // They will be updated with real data when loadDashboardData runs
+    
+    // Daily chart data (shows hours of the day)
     const dailyData = {
       labels: ['8AM', '10AM', '12PM', '2PM', '4PM', '6PM', '8PM'],
-      data: [400, 900, 1200, 1500, 1300, 1100, 600]
+      data: [0, 0, 0, 0, 0, 0, 0]
     };
     
+    // Weekly chart data (shows days of the week)
     const weeklyData = {
       labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      data: [1200, 1900, 1500, 1800, 2100, 2500, 1700]
+      data: [0, 0, 0, 0, 0, 0, 0]
     };
     
+    // Monthly chart data (shows months of the year)
     const monthlyData = {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      data: [5000, 5500, 6800, 7200, 8000, 7500, 7800, 8500, 9000, 9500, 11000, 12000]
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     };
     
-    // Initialize sales chart with weekly data
+    // Track which time period is currently selected (day, week, month)
     let currentPeriod = 'week';
+    
+    // Will hold reference to the sales chart once it's created
     let salesChart;
     
+    // Create and initialize the sales chart
     function initializeSalesChart(period) {
+      // Get the canvas element where the chart will be drawn
       const salesCtx = document.getElementById('salesChart').getContext('2d');
       
+      // Select which data to use based on the time period
       let chartData;
       if (period === 'day') {
         chartData = dailyData;
@@ -235,12 +256,12 @@
         chartData = weeklyData; // default to week
       }
       
-      // If chart already exists, destroy it
+      // If a chart already exists, destroy it before creating a new one
       if (salesChart) {
         salesChart.destroy();
       }
       
-      // Create new chart
+      // Create a new line chart using Chart.js
       salesChart = new Chart(salesCtx, {
         type: 'line',
         data: {
@@ -292,10 +313,10 @@
       });
     }
     
-    // Initialize sales chart with default period (weekly)
+    // Initialize the sales chart with the default period (weekly)
     initializeSalesChart(currentPeriod);
     
-    // Add event listeners to period selector buttons
+    // Set up buttons to switch between day, week, and month views
     document.querySelectorAll('.period-selector button').forEach(button => {
       button.addEventListener('click', function() {
         // Remove active class from all buttons
@@ -303,61 +324,639 @@
           btn.classList.remove('active');
         });
         
-        // Add active class to clicked button
+        // Add active class to the clicked button
         this.classList.add('active');
         
-        // Update chart with selected period data
+        // Get the time period from the button's data attribute
         const period = this.dataset.period;
         currentPeriod = period;
-        initializeSalesChart(period);
+        
+        // Update the chart with data for the selected period
+        if (localStorage.getItem('token')) {
+          // If logged in, use the real data we've already loaded
+          let chartData;
+          if (period === 'day') {
+            chartData = dailyData;
+          } else if (period === 'month') {
+            chartData = monthlyData;
+          } else {
+            chartData = weeklyData;
+          }
+          
+          // Update the chart with the selected period's data
+          if (salesChart && chartData) {
+            salesChart.data.labels = chartData.labels;
+            salesChart.data.datasets[0].data = chartData.data;
+            salesChart.update();
+          }
+        } else {
+          // If not logged in, just show empty data
+          initializeSalesChart(period);
+        }
       });
     });
 
-    // Products Chart
-    const productsCtx = document.getElementById('productsChart').getContext('2d');
-    const productsChart = new Chart(productsCtx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Others'],
-        datasets: [{
-          data: [30, 25, 20, 15, 10],
-          backgroundColor: [
-            'rgba(54, 162, 235, 0.8)',
-            'rgba(255, 99, 132, 0.8)',
-            'rgba(75, 192, 192, 0.8)',
-            'rgba(255, 206, 86, 0.8)',
-            'rgba(153, 102, 255, 0.8)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              boxWidth: 12
+    // -------- PRODUCTS CHART SETUP --------
+    // Global reference to the products chart
+    let productsChart;
+
+    // Create and initialize the products chart
+    function initializeProductsChart() {
+      // Get the canvas element where the chart will be drawn
+      const productsCtx = document.getElementById('productsChart').getContext('2d');
+      
+      // Create a new doughnut chart using Chart.js
+      productsChart = new Chart(productsCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['No Data Available'],
+          datasets: [{
+            data: [100],
+            backgroundColor: [
+              'rgba(200, 200, 200, 0.8)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12
+              }
             }
           }
         }
-      }
-    });
+      });
+    }
+
+    // Initialize the products chart
+    initializeProductsChart();
     
-    // Refresh recommendations button
+    // Set up refresh button for recommendations
     document.querySelector('.refresh-recommendations').addEventListener('click', function() {
+      // Only allow refresh for logged-in users
+      if (!localStorage.getItem('token')) {
+        return;
+      }
+      
       const button = this;
+      
+      // Disable button and show loading spinner
       button.disabled = true;
       button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
       
-      // Simulate refreshing data after delay
-      setTimeout(() => {
-        button.disabled = false;
-        button.innerHTML = '<i class="fas fa-sync-alt"></i>';
-      }, 1500);
+      // Fetch fresh recommendations
+      loadRecommendations().finally(() => {
+        // Re-enable button after loading
+        setTimeout(() => {
+          button.disabled = false;
+          button.innerHTML = '<i class="fas fa-sync-alt"></i>';
+        }, 500);
+      });
     });
+    
+    // Load recommendations for all users, but different recommendations based on login status
+    loadRecommendations();
   });
+  
+  // Function to load real dashboard data from API
+  async function loadDashboardData() {
+    console.log("Starting to load dashboard data...");
+    
+    // Reset charts to empty state initially
+    updateChartDataWithRealData({}, {}, {});
+    updateProductsChart({});
+    
+    try {
+      // Step 1: Fetch all user data from the API
+      console.log("Fetching data from /api/data endpoint...");
+      const response = await fetchWithAuth('/api/data');
+      const data = await handleApiResponse(response);
+      
+      console.log("Data received:", data);
+      
+      // Step 2: Process the data if it exists
+      if (data && data.success && data.data && data.data.length > 0) {
+        console.log(`Processing ${data.data.length} data entries`);
+        
+        // Initialize counters and data storage objects
+        let totalSales = 0;
+        let totalItems = 0;
+        let allDailySales = {};
+        let allHourlySales = {}; // For daily view
+        let allMonthlySales = {}; // For monthly view
+        
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+        
+        // Get current month and previous month for comparison
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+        const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+        
+        let currentMonthSales = 0;
+        let prevMonthSales = 0;
+        let currentMonthItems = 0;
+        let prevMonthItems = 0;
+        
+        // Step 3: Loop through all data entries to calculate totals
+        data.data.forEach(entry => {
+          // Process sales data from each entry
+          if (entry.salesData && entry.salesData.length > 0) {
+            console.log(`Processing ${entry.salesData.length} sales entries for data ID: ${entry._id}`);
+            entry.salesData.forEach(sale => {
+              const saleDate = new Date(sale.date);
+              const saleMonth = saleDate.getMonth();
+              const saleYear = saleDate.getFullYear();
+              
+              // Add to total sales and items count
+              totalSales += sale.amount;
+              totalItems += sale.itemsSold;
+              
+              // Track current and previous month stats for comparison
+              if (saleMonth === currentMonth && saleYear === currentYear) {
+                currentMonthSales += sale.amount;
+                currentMonthItems += sale.itemsSold;
+              } else if (saleMonth === prevMonth && saleYear === prevMonthYear) {
+                prevMonthSales += sale.amount;
+                prevMonthItems += sale.itemsSold;
+              }
+              
+              // Group by day for weekly chart
+              const dateStr = saleDate.toISOString().split('T')[0];
+              if (!allDailySales[dateStr]) {
+                allDailySales[dateStr] = 0;
+              }
+              allDailySales[dateStr] += sale.amount;
+              
+              // Group by month for monthly chart
+              const monthStr = `${saleDate.getFullYear()}-${String(saleDate.getMonth() + 1).padStart(2, '0')}`;
+              if (!allMonthlySales[monthStr]) {
+                allMonthlySales[monthStr] = 0;
+              }
+              allMonthlySales[monthStr] += sale.amount;
+              
+              // Group by hour for today's data
+              if (dateStr === today) {
+                const hour = saleDate.getHours();
+                if (!allHourlySales[hour]) {
+                  allHourlySales[hour] = 0;
+                }
+                allHourlySales[hour] += sale.amount;
+              }
+            });
+          }
+        });
+        
+        // Step 4: Process categories for products chart
+        let categoryCounts = {};
+        data.data.forEach(entry => {
+          if (entry.salesData && entry.salesData.length > 0) {
+            entry.salesData.forEach(sale => {
+              if (sale.categories && sale.categories.length > 0) {
+                console.log(`Found categories: ${sale.categories.join(', ')}`);
+                sale.categories.forEach(category => {
+                  if (!categoryCounts[category]) {
+                    categoryCounts[category] = 0;
+                  }
+                  categoryCounts[category] += sale.amount;
+                });
+              }
+            });
+          }
+        });
+        
+        console.log("Total sales calculated:", totalSales);
+        console.log("Current month sales:", currentMonthSales);
+        console.log("Previous month sales:", prevMonthSales);
+        console.log("Category data:", categoryCounts);
+        
+        // Step 5: Calculate percentage changes for month-over-month comparisons
+        const salesChangePercent = prevMonthSales > 0 
+          ? Math.round(((currentMonthSales - prevMonthSales) / prevMonthSales) * 100) 
+          : 0;
+        
+        const customerChangePercent = prevMonthItems > 0 
+          ? Math.round(((currentMonthItems - prevMonthItems) / prevMonthItems) * 100) 
+          : 0;
+        
+        const avgSaleCurrent = currentMonthItems > 0 ? currentMonthSales / currentMonthItems : 0;
+        const avgSalePrev = prevMonthItems > 0 ? prevMonthSales / prevMonthItems : 0;
+        const avgSaleChangePercent = avgSalePrev > 0 
+          ? Math.round(((avgSaleCurrent - avgSalePrev) / avgSalePrev) * 100) 
+          : 0;
+        
+        // Step 6: Update the dashboard cards with real data
+        console.log("Updating dashboard cards with real values");
+        
+        // Update total sales card
+        document.getElementById('totalSales').textContent = formatCurrency(totalSales);
+        document.getElementById('salesChangePercent').textContent = Math.abs(salesChangePercent);
+        
+        // Update sales trend icon (up or down arrow)
+        const salesChangeIcon = document.querySelector('#salesChange i');
+        if (salesChangePercent < 0) {
+          salesChangeIcon.className = 'fas fa-arrow-down text-danger';
+        } else {
+          salesChangeIcon.className = 'fas fa-arrow-up text-success';
+        }
+        
+        // Update customer count card
+        document.getElementById('customerCount').textContent = totalItems;
+        document.getElementById('customerChangePercent').textContent = Math.abs(customerChangePercent);
+        
+        // Update customer trend icon (up or down arrow)
+        const customerChangeIcon = document.querySelector('#customerChange i');
+        if (customerChangePercent < 0) {
+          customerChangeIcon.className = 'fas fa-arrow-down text-danger';
+        } else {
+          customerChangeIcon.className = 'fas fa-arrow-up text-success';
+        }
+        
+        // Update average sale card
+        const avgSale = totalItems > 0 ? totalSales / totalItems : 0;
+        document.getElementById('avgSale').textContent = formatCurrency(avgSale);
+        document.getElementById('avgSaleChangePercent').textContent = Math.abs(avgSaleChangePercent);
+        
+        // Update average sale trend icon (up or down arrow)
+        const avgSaleChangeIcon = document.querySelector('#avgSaleChange i');
+        if (avgSaleChangePercent < 0) {
+          avgSaleChangeIcon.className = 'fas fa-arrow-down text-danger';
+        } else {
+          avgSaleChangeIcon.className = 'fas fa-arrow-up text-success';
+        }
+        
+        // Step 7: Update charts with real data
+        console.log("Updating chart data");
+        updateChartDataWithRealData(allHourlySales, allDailySales, allMonthlySales);
+        
+        // Step 8: Update products chart
+        console.log("Updating products chart");
+        updateProductsChart(categoryCounts);
+        
+        console.log("Dashboard data fully loaded and rendered!");
+        
+      } else {
+        // Handle case where no data is available
+        console.log("No data available or empty data array received");
+        
+        // Clear out dashboard values
+        document.getElementById('totalSales').textContent = formatCurrency(0);
+        document.getElementById('customerCount').textContent = "0";
+        document.getElementById('avgSale').textContent = formatCurrency(0);
+        
+        // Hide change indicators when no data
+        document.getElementById('salesChange').style.visibility = 'hidden';
+        document.getElementById('customerChange').style.visibility = 'hidden';
+        document.getElementById('avgSaleChange').style.visibility = 'hidden';
+      }
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      
+      // Show error message in charts
+      if (salesChart) {
+        salesChart.data.labels = ['Error loading data'];
+        salesChart.data.datasets[0].data = [0];
+        salesChart.update();
+      }
+      
+      if (productsChart) {
+        productsChart.data.labels = ['Error'];
+        productsChart.data.datasets[0].data = [100];
+        productsChart.data.datasets[0].backgroundColor = ['rgba(220, 53, 69, 0.8)'];
+        productsChart.update();
+      }
+    }
+  }
+  
+  // Helper function to update all chart periods with real data
+  function updateChartDataWithRealData(hourlyData, dailyData, monthlyData) {
+    console.log("Updating chart data with:", {
+      hourlyDataPoints: Object.keys(hourlyData).length,
+      dailyDataPoints: Object.keys(dailyData).length,
+      monthlyDataPoints: Object.keys(monthlyData).length
+    });
+    
+    // Step 1: Update daily (hourly) data for the day view
+    if (Object.keys(hourlyData).length > 0) {
+      // Create an array of all 24 hours
+      const hours = Array.from({length: 24}, (_, i) => i);
+      const hourLabels = hours.map(hour => `${hour}:00`);
+      const hourValues = hours.map(hour => hourlyData[hour] || 0);
+      
+      // Keep only business hours for display (8AM-8PM)
+      const businessHours = hourLabels.slice(8, 21);
+      const businessValues = hourValues.slice(8, 21);
+      
+      // Update daily data object
+      dailyData.labels = businessHours;
+      dailyData.data = businessValues;
+    }
+    
+    // Step 2: Update weekly data for the week view
+    if (Object.keys(dailyData).length > 0) {
+      // Sort dates chronologically
+      const sortedDates = Object.keys(dailyData).sort();
+      console.log("Daily data dates:", sortedDates);
+      
+      // Get last 7 days of data (or fewer if not available)
+      const chartDates = sortedDates.slice(-7);
+      const chartData = chartDates.map(date => dailyData[date]);
+      
+      // Format dates to show day names (Mon, Tue, etc.)
+      const formattedDates = chartDates.map(date => {
+        const d = new Date(date);
+        return d.toLocaleDateString('en-US', { weekday: 'short' });
+      });
+      
+      console.log("Weekly chart data:", {
+        dates: formattedDates,
+        values: chartData
+      });
+      
+      // Update weekly data object
+      weeklyData.labels = formattedDates;
+      weeklyData.data = chartData;
+    }
+    
+    // Step 3: Update monthly data for the month view
+    if (Object.keys(monthlyData).length > 0) {
+      // Sort months chronologically
+      const sortedMonths = Object.keys(monthlyData).sort();
+      
+      // Get last 12 months (or fewer if not available)
+      const chartMonths = sortedMonths.slice(-12);
+      const chartData = chartMonths.map(month => monthlyData[month]);
+      
+      // Format months to show month names (Jan, Feb, etc.)
+      const formattedMonths = chartMonths.map(month => {
+        const [year, monthNum] = month.split('-');
+        return new Date(parseInt(year), parseInt(monthNum) - 1, 1)
+          .toLocaleDateString('en-US', { month: 'short' });
+      });
+      
+      // Update monthly data object
+      monthlyData.labels = formattedMonths;
+      monthlyData.data = chartData;
+    }
+    
+    // Step 4: Update the current chart based on selected period (day, week, month)
+    if (salesChart) {
+      let currentData;
+      
+      if (currentPeriod === 'day') {
+        currentData = dailyData;
+      } else if (currentPeriod === 'month') {
+        currentData = monthlyData;
+      } else {
+        currentData = weeklyData; // default to week
+      }
+      
+      console.log(`Updating sales chart with ${currentPeriod} data:`, {
+        labels: currentData.labels,
+        data: currentData.data
+      });
+      
+      // Update the chart with the new data
+      salesChart.data.labels = currentData.labels;
+      salesChart.data.datasets[0].data = currentData.data;
+      salesChart.update();
+    }
+  }
+  
+  // Helper function to update the products chart with real data
+  function updateProductsChart(categoryCounts) {
+    if (Object.keys(categoryCounts).length > 0) {
+      console.log("Updating products chart with categories:", Object.keys(categoryCounts));
+      
+      // Step 1: Sort categories by sales amount (descending)
+      const sortedCategories = Object.entries(categoryCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4); // Top 4 categories
+      
+      console.log("Top categories:", sortedCategories);
+      
+      // Step 2: Calculate "Others" category for remaining categories
+      let otherTotal = 0;
+      Object.entries(categoryCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(4)
+        .forEach(([_, amount]) => {
+          otherTotal += amount;
+        });
+      
+      // Step 3: Prepare chart data
+      const categoryLabels = sortedCategories.map(item => item[0]);
+      const categoryData = sortedCategories.map(item => item[1]);
+      
+      // Add "Others" category if there are more than 4 categories
+      if (otherTotal > 0) {
+        categoryLabels.push('Others');
+        categoryData.push(otherTotal);
+      }
+      
+      // Step 4: Update the products chart
+      if (productsChart) {
+        console.log("Final product chart data:", {
+          labels: categoryLabels,
+          data: categoryData
+        });
+        
+        // Update the chart with the new data
+        productsChart.data.labels = categoryLabels;
+        productsChart.data.datasets[0].data = categoryData;
+        productsChart.update();
+      }
+    } else {
+      console.log("No category data available for products chart");
+    }
+  }
+  
+  // Helper function to format currency values (e.g., $1,234.56)
+  function formatCurrency(value) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+  }
+  
+  // Function to load recommendations from the API
+  async function loadRecommendations() {
+    try {
+      // Show loading state
+      const recommendationsList = document.getElementById('recommendationsList');
+      const loadingElement = document.getElementById('recommendationsLoading');
+      const emptyElement = document.getElementById('recommendationsEmpty');
+      
+      // Check if user is logged in
+      const isLoggedIn = localStorage.getItem('token');
+      
+      // For non-logged in users, immediately hide the loading spinner
+      if (!isLoggedIn) {
+        loadingElement.classList.add('d-none');
+      } else {
+        // For logged-in users, show loading indicator until API response
+        loadingElement.classList.remove('d-none');
+      }
+      
+      emptyElement.classList.add('d-none');
+      
+      // Remove any existing recommendations
+      const existingItems = recommendationsList.querySelectorAll('.list-group-item');
+      existingItems.forEach(item => item.remove());
+      
+      // Define a function to create recommendation items
+      const createRecommendationItem = (recommendation) => {
+        const badge = recommendation.badge || 'bg-primary';
+        const priority = recommendation.priority || 'medium';
+        
+        // Generate recommendation HTML
+        const recommendationItem = document.createElement('a');
+        recommendationItem.href = '#';
+        recommendationItem.className = 'list-group-item list-group-item-action p-3';
+        recommendationItem.dataset.id = recommendation._id || recommendation.id || 'temp-id';
+        
+        // Only show dismiss button for logged-in users
+        const dismissButton = isLoggedIn ? 
+          `<button class="btn btn-sm btn-close dismiss-recommendation" aria-label="Dismiss"></button>` : 
+          '';
+        
+        recommendationItem.innerHTML = `
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1 fw-bold">${recommendation.title}</h6>
+            <div>
+              <span class="badge ${badge} me-2">${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority</span>
+              ${dismissButton}
+            </div>
+          </div>
+          <p class="mb-1 text-muted">${recommendation.description}</p>
+        `;
+        
+        // Add to list
+        recommendationsList.appendChild(recommendationItem);
+        
+        // Add event listener for dismiss button if present and user is logged in
+        if (isLoggedIn) {
+          const dismissBtn = recommendationItem.querySelector('.dismiss-recommendation');
+          if (dismissBtn) {
+            dismissBtn.addEventListener('click', async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              try {
+                // Show loading state on the button
+                dismissBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+                dismissBtn.disabled = true;
+                
+                const recId = recommendationItem.dataset.id;
+                
+                // Call API to dismiss recommendation
+                const response = await fetchWithAuth(`/api/recommendations/${recId}`, {
+                  method: 'DELETE'
+                });
+                
+                await handleApiResponse(response);
+                
+                // Remove the recommendation from the UI with a fade out effect
+                recommendationItem.style.transition = 'opacity 0.3s ease';
+                recommendationItem.style.opacity = '0';
+                
+                setTimeout(() => {
+                  recommendationItem.remove();
+                  
+                  // If no recommendations left, show empty state
+                  if (recommendationsList.querySelectorAll('.list-group-item').length === 0) {
+                    emptyElement.classList.remove('d-none');
+                  }
+                }, 300);
+                
+              } catch (error) {
+                console.error('Error dismissing recommendation:', error);
+                // Reset button
+                dismissBtn.innerHTML = '×';
+                dismissBtn.disabled = false;
+                // Show error toast or feedback
+                alert('Could not dismiss recommendation. Please try again.');
+              }
+            });
+          }
+        }
+      };
+      
+      if (!isLoggedIn) {
+        // For non-logged in users, show default recommendations
+        const defaultRecommendations = [
+          {
+            id: "guest-rec-1",
+            title: "Create an Account",
+            description: "Sign up to unlock personalized business recommendations based on your data.",
+            priority: "high",
+            badge: "bg-primary"
+          },
+          {
+            id: "guest-rec-2",
+            title: "Upload Your Business Data",
+            description: "Start by uploading your sales, customer, and traffic data to get tailored insights.",
+            priority: "medium",
+            badge: "bg-info"
+          },
+          {
+            id: "guest-rec-3",
+            title: "Explore Dashboard Features",
+            description: "Learn how our analytics tools can help you make data-driven business decisions.",
+            priority: "low",
+            badge: "bg-secondary"
+          }
+        ];
+        
+        // Create and append default recommendation items
+        defaultRecommendations.forEach(recommendation => {
+          createRecommendationItem(recommendation);
+        });
+      } else {
+        // For logged-in users, fetch recommendations from API
+        try {
+          const response = await fetchWithAuth('/api/recommendations');
+          const data = await handleApiResponse(response);
+          
+          // Hide loading indicator
+          loadingElement.classList.add('d-none');
+          
+          if (data && data.success && data.recommendations && data.recommendations.length > 0) {
+            // Limit to showing only 3 recommendations to avoid clutter
+            const topRecommendations = data.recommendations.slice(0, 3);
+            
+            // Create and append recommendation items
+            topRecommendations.forEach(recommendation => {
+              createRecommendationItem(recommendation);
+            });
+          } else {
+            // Show empty state if no recommendations
+            emptyElement.classList.remove('d-none');
+          }
+        } catch (error) {
+          console.error('Error fetching recommendations:', error);
+          loadingElement.classList.add('d-none');
+          emptyElement.classList.remove('d-none');
+          emptyElement.querySelector('h5').textContent = 'Error Loading Recommendations';
+          emptyElement.querySelector('p').textContent = 'Please try refreshing the page.';
+        }
+      }
+    } catch (error) {
+      console.error('Error loading recommendations:', error);
+      
+      // Show error state
+      const loadingElement = document.getElementById('recommendationsLoading');
+      loadingElement.classList.add('d-none');
+      
+      const emptyElement = document.getElementById('recommendationsEmpty');
+      emptyElement.classList.remove('d-none');
+      emptyElement.querySelector('h5').textContent = 'Error Loading Recommendations';
+      emptyElement.querySelector('p').textContent = 'Please try refreshing the page.';
+    }
+  }
 </script>
 
 <style>

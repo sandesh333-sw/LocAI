@@ -177,7 +177,7 @@
       const errorElement = document.getElementById('salesError');
       
       try {
-        const response = await fetchWithAuth('/api/data/upload', {
+        const response = await fetchWithAuth('/api/data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -235,7 +235,7 @@
       const errorElement = document.getElementById('customerError');
       
       try {
-        const response = await fetchWithAuth('/api/data/upload', {
+        const response = await fetchWithAuth('/api/data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -283,7 +283,7 @@
       const errorElement = document.getElementById('trafficError');
       
       try {
-        const response = await fetchWithAuth('/api/data/upload', {
+        const response = await fetchWithAuth('/api/data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

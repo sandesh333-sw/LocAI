@@ -1,11 +1,19 @@
 const Data = require('../models/Data');
 
 // @desc    Upload business data
-// @route   POST /api/data/upload
+// @route   POST /api/data
 // @access  Private
 exports.uploadData = async (req, res) => {
   try {
     const { salesData, customerInteractions, footTraffic } = req.body;
+    
+    // Validate inputs
+    if (!salesData && !customerInteractions && !footTraffic) {
+      return res.status(400).json({
+        success: false,
+        message: 'At least one data type must be provided'
+      });
+    }
     
     // Create data entry
     const data = await Data.create({
@@ -15,14 +23,17 @@ exports.uploadData = async (req, res) => {
       footTraffic: footTraffic || []
     });
 
+    console.log(`Data uploaded successfully for user ${req.user._id}`);
+    
     res.status(201).json({
       success: true,
       data
     });
   } catch (error) {
+    console.error('Data upload error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'An error occurred while uploading data'
     });
   }
 };

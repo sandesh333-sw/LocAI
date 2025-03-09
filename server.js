@@ -62,6 +62,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/api/auth', require('./routes/userRoutes'));
 app.use('/api/data', require('./routes/dataRoutes'));
 app.use('/api/analysis', require('./routes/aiRoutes'));
+app.use('/api/recommendations', require('./routes/recommendationsRoutes'));
 
 // Page Routes
 app.get('/', (req, res) => {
@@ -78,10 +79,6 @@ app.get('/register', (req, res) => {
 
 app.get('/data', (req, res) => {
   res.render('data');
-});
-
-app.get('/insights', (req, res) => {
-  res.render('insights');
 });
 
 app.get('/profile', (req, res) => {
